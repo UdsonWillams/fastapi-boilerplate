@@ -18,6 +18,7 @@ class LogConfig(BaseModel):
     # Logging config
     version: int = 1
     disable_existing_loggers: bool = False
+    # levelprfix é oque da a cor ao log
     formatters: dict = {
         "default": {
             "()": "uvicorn.logging.DefaultFormatter",
