@@ -6,7 +6,7 @@ from fastapi.responses import (
     RedirectResponse,
 )
 
-from app.api.v1.api_health import (
+from app.api.api_health import (
     check_health,
     return_docs,
 )
@@ -14,7 +14,6 @@ from tests.unit import DefaultTestCase
 
 
 class HealthCheckTestCase(DefaultTestCase):
-
     def setUp(self) -> None:
         self.health_check_response = {"status": "OK"}
         return super().setUp()

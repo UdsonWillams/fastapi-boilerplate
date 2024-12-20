@@ -13,7 +13,7 @@ from app.api.v1.currency_converter.exceptions import (
     GenericApiException,
     ValidateAcronymException,
 )
-from app.api.v1.currency_converter.models import Currency
+from app.api.v1.currency_converter.schemas.input import Currency
 from app.api.v1.currency_converter.views import (
     create_currency,
     currency_exchange,
@@ -21,7 +21,7 @@ from app.api.v1.currency_converter.views import (
     get_all_currency,
     get_currency,
 )
-from app.exceptions.default_exceptions import (
+from app.default_exceptions.exceptions import (
     ApiInvalidResponseException,
     MongoRepositoryTransactionsException,
 )
@@ -31,7 +31,6 @@ default_date_format = "%d/%m/%Y"
 
 
 class CurrencyViewsTestCase(DefaultTestCase):
-
     def setUp(self) -> None:
         return super().setUp()
 
@@ -41,7 +40,6 @@ class CurrencyViewsTestCase(DefaultTestCase):
     def test_get_currency(
         self, mock_get_by_acronym: Mock, redis_mock_get: Mock, redis_mock_create: Mock
     ):
-
         redis_mock_get.return_value = False
         redis_mock_create.return_value = False
         return_mock = Currency(
@@ -55,7 +53,7 @@ class CurrencyViewsTestCase(DefaultTestCase):
 
     @patch("app.repositories.redis_repository.RedisRepository.get")
     @patch("app.repositories.mongo_repository.MongoRepository.get_by_acronym")
-    @patch("app.services.awesomeapi.AwesomeApiService._execute")
+    @patch("app.services.http_connection.awesomeapi.AwesomeApiService._execute")
     def test_get_currency_passing_in_the_api(
         self, mock_currency_api: Mock, mock_get_by_acronym: Mock, redis_mock: Mock
     ):
@@ -70,7 +68,7 @@ class CurrencyViewsTestCase(DefaultTestCase):
 
     @patch("app.repositories.redis_repository.RedisRepository.get")
     @patch("app.repositories.mongo_repository.MongoRepository.get_by_acronym")
-    @patch("app.services.awesomeapi.AwesomeApiService._execute")
+    @patch("app.services.http_connection.awesomeapi.AwesomeApiService._execute")
     def test_get_currency_passing_in_the_api_and_return_it_invalid_response(
         self, mock_currency_api: Mock, mock_get_by_acronym: Mock, redis_mock: Mock
     ):
@@ -88,7 +86,6 @@ class CurrencyViewsTestCase(DefaultTestCase):
 
     @patch("app.repositories.mongo_repository.MongoRepository.get_by_acronym")
     def test_get_currency_raise_generic_error(self, mock_get_by_acronym: Mock):
-
         return_value = Currency(
             acronym="TEST", name="TESTE-NAME", dolar_price_reference=10
         ).model_dump()
@@ -105,7 +102,6 @@ class CurrencyViewsTestCase(DefaultTestCase):
 
     @patch("app.repositories.mongo_repository.MongoRepository.get_by_acronym")
     def test_get_one_currency(self, mock_get_by_acronym: Mock):
-
         return_value = Currency(
             acronym="TEST", name="TESTE-NAME", dolar_price_reference=10
         ).model_dump()
@@ -117,7 +113,6 @@ class CurrencyViewsTestCase(DefaultTestCase):
 
     @patch("app.repositories.mongo_repository.MongoRepository.get_by_acronym")
     def test_get_currency_not_found_value(self, mock_get_by_acronym: Mock):
-
         mock_get_by_acronym.return_value = None
         response: JSONResponse = get_currency(acronym="USD")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -127,7 +122,6 @@ class CurrencyViewsTestCase(DefaultTestCase):
     def test_get_currency_repository_raises_unexpected_error(
         self, mock_get_by_acronym: Mock
     ):
-
         mock_get_by_acronym.side_effect = Exception("test error")
 
         with self.assertRaises(GenericApiException) as context_error:
@@ -142,7 +136,6 @@ class CurrencyViewsTestCase(DefaultTestCase):
     @patch("app.repositories.redis_repository.RedisRepository.get")
     @patch("app.repositories.mongo_repository.MongoRepository.get_all_currency")
     def test_get_all_currency(self, redis_mock: Mock, mock_get_by_acronym: Mock):
-
         redis_mock.return_value = False
         return_value = Currency(
             acronym="TEST", name="TESTE-NAME", dolar_price_reference=10
@@ -158,7 +151,6 @@ class CurrencyViewsTestCase(DefaultTestCase):
     def test_get_all_currency_and_repository_raises_unexpected_error(
         self, mock_get_by_acronym: Mock
     ):
-
         mock_get_by_acronym.side_effect = Exception("test error")
 
         with self.assertRaises(GenericApiException) as context_error:
@@ -172,7 +164,6 @@ class CurrencyViewsTestCase(DefaultTestCase):
 
     @patch("app.repositories.mongo_repository.MongoRepository.create")
     def test_create_currency(self, mock_repository_create: Mock):
-
         payload = Currency(acronym="TEST", name="TESTE-NAME", dolar_price_reference=10)
         mock_repository_create.return_value = None
 
@@ -184,7 +175,6 @@ class CurrencyViewsTestCase(DefaultTestCase):
     def test_create_currency_repository_raises_unexpected_error(
         self, mock_repository_create: Mock
     ):
-
         mock_repository_create.side_effect = Exception("test error")
         payload = Currency(acronym="TEST", name="TESTE-NAME", dolar_price_reference=10)
 
@@ -199,7 +189,6 @@ class CurrencyViewsTestCase(DefaultTestCase):
 
     @patch("app.repositories.mongo_repository.MongoRepository.create")
     def test_create_model_raises_validate_error(self, mock_repository_create: Mock):
-
         mock_repository_create.side_effect = Exception("test error")
         with self.assertRaises(ValidateAcronymException) as context_error:
             create_currency(
@@ -215,12 +204,14 @@ class CurrencyViewsTestCase(DefaultTestCase):
         )
 
     @patch(
-        "app.api.v1.currency_converter.service.CurrencyConverterService.create_currency"
+        (
+            "app.services.domain.currency_converter_service."
+            "CurrencyConverterService.create_currency"
+        )
     )
     def test_create_currency_endpoint_raises_unexpected_error(
         self, mock_repository_create: Mock
     ):
-
         mock_repository_create.side_effect = Exception("test error")
         payload = Currency(acronym="TEST", name="TESTE-NAME", dolar_price_reference=10)
 
@@ -234,12 +225,14 @@ class CurrencyViewsTestCase(DefaultTestCase):
         )
 
     @patch(
-        "app.api.v1.currency_converter.service.CurrencyConverterService.delete_currency"
+        (
+            "app.services.domain.currency_converter_service."
+            "CurrencyConverterService.delete_currency"
+        )
     )
     def test_delete_currency_endpoint_raises_unexpected_error(
         self, mock_delete_repository: Mock
     ):
-
         mock_delete_repository.side_effect = Exception("test error")
         payload = Currency(acronym="TEST", name="TESTE-NAME", dolar_price_reference=10)
 
@@ -264,7 +257,6 @@ class CurrencyViewsTestCase(DefaultTestCase):
     def test_delete_currency_by_acronym_and_repository_raises_unexpected_error(
         self, mock_repository_delete: Mock
     ):
-
         mock_repository_delete.side_effect = Exception("test error")
 
         with self.assertRaises(CurrencyServiceException) as context_error:
@@ -278,14 +270,13 @@ class CurrencyViewsTestCase(DefaultTestCase):
 
     @patch(
         (
-            "app.api.v1.currency_converter.service.CurrencyConverterService."
+            "app.services.domain.currency_converter_service.CurrencyConverterService."
             "delete_currency"
         )
     )
     def test_delete_currency_by_acronym_and_flow_raises_unexpected_error(
         self, mock_delete_currency_by_name: Mock
     ):
-
         mock_delete_currency_by_name.side_effect = Exception("test error")
 
         with self.assertRaises(GenericApiException) as context_error:

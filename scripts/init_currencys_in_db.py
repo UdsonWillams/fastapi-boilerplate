@@ -1,8 +1,8 @@
 import logging
 
-from app.api.v1.currency_converter.models import Currency
+from app.api.v1.currency_converter.schemas.input import Currency
 from app.repositories.mongo_repository import MongoRepository
-from app.services.awesomeapi import AwesomeApiService
+from app.services.http_connection.awesomeapi import AwesomeApiService
 
 logger = logging.getLogger(__name__)
 CURRENCY_DATABASE = "currency_db"

@@ -4,10 +4,10 @@ from fastapi import (
 )
 from fastapi.responses import JSONResponse
 
-from app.api.v1.words.sort.models import SortWordsRequest
-from app.api.v1.words.sort.service import SortWordService
+from app.api.v1.words.sort.schemas.input import SortWordsRequest
+from app.services.domain.sort_word_service import SortWordService
 
-router = APIRouter(tags=["Words"])
+router = APIRouter()
 
 
 @router.post(

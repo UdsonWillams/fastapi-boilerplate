@@ -25,7 +25,7 @@ class Settings(BaseSettings):
 
 
 @lru_cache
-def return_default_settings() -> Settings:
+def get_settings() -> Settings:
     """
     Chamamos sempre essa função com os valores em cache
     para evitar aumento de memoria desnecessário.

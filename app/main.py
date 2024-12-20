@@ -1,26 +1,24 @@
 import logging
-from logging.config import dictConfig
+from logging import config
 
 from fastapi import FastAPI
 
 from app import lifespan
-from app.api.v1.api_health import router as health_check_router
-from app.api.v1.currency_converter.views import router as currency_converter_router
-from app.api.v1.words.sort.views import router as sort_router
-from app.api.v1.words.vowel_count.views import router as vowel_count_router
-from app.utils.config import return_default_settings
-from app.utils.logger import LogConfig
-from app.utils.middlewares import ResponseTimeMiddleware
+from app.api import api_router
+from app.core.logger import logger_config
+from app.core.settings import get_settings
 
-dictConfig(LogConfig().model_dump())
-
+config.dictConfig(logger_config)
 logger = logging.getLogger("app")
-settings = return_default_settings()
 
-app = FastAPI(lifespan=lifespan)
-api_v1 = "/api/v1"
-app.include_router(health_check_router)
-app.include_router(currency_converter_router, prefix=api_v1)
-app.include_router(sort_router, prefix=api_v1)
-app.include_router(vowel_count_router, prefix=api_v1)
-app.add_middleware(ResponseTimeMiddleware)
+settings = get_settings()
+
+app = FastAPI(
+    title="FastApi Boilerplate",
+    description="Api para servir de base para novos projetos",
+    docs_url="/swagger",
+    redoc_url="/docs",
+    separate_input_output_schemas=True,
+    lifespan=lifespan,
+)
+app.include_router(router=api_router)

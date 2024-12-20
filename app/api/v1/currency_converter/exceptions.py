@@ -3,7 +3,7 @@ from typing import (
     Dict,
 )
 
-from app.exceptions.default_exceptions import DefaultApiException
+from app.default_exceptions.exceptions import DefaultApiException
 
 
 class GenericApiException(DefaultApiException):

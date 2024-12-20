@@ -8,14 +8,13 @@ from fastapi import status
 from fastapi.responses import JSONResponse
 
 from app.api.v1.words.vowel_count.exceptions import VowelCountException
-from app.api.v1.words.vowel_count.models import VowelCountRequest
+from app.api.v1.words.vowel_count.schemas.input import VowelCountRequest
 from app.api.v1.words.vowel_count.views import vowel_count
-from app.exceptions.default_exceptions import InternalServerErrorException
+from app.default_exceptions.exceptions import InternalServerErrorException
 from tests.unit import DefaultTestCase
 
 
 class CountVowelsTestCase(DefaultTestCase):
-
     def setUp(self) -> None:
         self.count_vowels_request = {"words": ["batman", "robin", "coringa"]}
         self.count_vowels_response = {"batman": 2, "robin": 2, "coringa": 3}
@@ -61,7 +60,7 @@ class CountVowelsTestCase(DefaultTestCase):
             context_error.exception.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 
-    @patch("app.api.v1.words.vowel_count.service.sum")
+    @patch("app.services.domain.vowel_count_service.sum")
     def test_vowel_count_service_raises_a_error(self, sum_mock: Mock):
         sum_mock.side_effect = Exception("error_exception")
         with self.assertRaises(VowelCountException) as context_error:

@@ -4,13 +4,12 @@ from fastapi import status
 from fastapi.responses import JSONResponse
 
 from app.api.v1.words.sort.exceptions import SortWordsException
-from app.api.v1.words.sort.models import SortWordsRequest
+from app.api.v1.words.sort.schemas.input import SortWordsRequest
 from app.api.v1.words.sort.views import sort_words
 from tests.unit import DefaultTestCase
 
 
 class SortWordsTestCase(DefaultTestCase):
-
     def setUp(self) -> None:
         self.sort_words_asc_request = {
             "words": [

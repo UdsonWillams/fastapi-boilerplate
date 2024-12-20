@@ -8,7 +8,7 @@ from unittest.mock import (
 from fastapi import status
 from pymongo.database import Database
 
-from app.exceptions.default_exceptions import MongoRepositoryTransactionsException
+from app.default_exceptions.exceptions import MongoRepositoryTransactionsException
 from app.repositories.mongo_repository import MongoRepository
 from tests.unit import DefaultTestCase
 from tests.unit.test_utils import MongoMockDB
@@ -17,7 +17,6 @@ default_date_format = "%d/%m/%Y"
 
 
 class MongoRepositoryTestCase(DefaultTestCase):
-
     def setUp(self) -> None:
         self.db_name = "db_name"
         self.collection = "db_collection"
@@ -32,7 +31,6 @@ class MongoRepositoryTestCase(DefaultTestCase):
 
     @patch.object(MongoRepository, "_get_database")
     def test_get_by_id_in_repository(self, bd_mock: Mock):
-
         bd_mock.return_value = self.mongo_mock_aux
         service = MongoRepository()
         functions_list = [
@@ -55,7 +53,6 @@ class MongoRepositoryTestCase(DefaultTestCase):
 
     @patch.object(MongoRepository, "_get_database")
     def test_repository_raises_unexpected_exception(self, bd_mock: Mock):
-
         bd_mock.side_effect = Exception("test error")
         service = MongoRepository()
         functions_list = [

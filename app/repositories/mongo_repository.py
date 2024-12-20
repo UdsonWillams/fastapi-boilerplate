@@ -3,11 +3,11 @@ import logging
 from pymongo import MongoClient
 from pymongo.database import Database
 
-from app.exceptions.default_exceptions import MongoRepositoryTransactionsException
-from app.utils.config import return_default_settings
+from app.core.settings import get_settings
+from app.default_exceptions.exceptions import MongoRepositoryTransactionsException
 
 logger = logging.getLogger(__name__)
-settings = return_default_settings()
+settings = get_settings()
 MAX_MONGO_TIMEOUT = 5000
 
 

@@ -23,14 +23,14 @@ COPY . .
 # Install Python dependencies
 RUN python3 -m pip install --upgrade setuptools wheel
 RUN pip install --upgrade pip
-RUN pip install -r requirements-dev.txt
+RUN pip install -r requirements.txt
 
 # Set the server port
 EXPOSE 8000
 
 ################### INIT CRON JOB
-# Give execution rights on the cron scripts
-RUN chmod 0644 init_currencys_in_db.py
+# Give execution rights on this script
+RUN chmod 0644 scripts/init_currencys_in_db.py
 
 # Add the cron job
 RUN crontab -l | { cat; echo "0 0 * * * python /home/$USER/init_currencys_in_db.py"; } | crontab -

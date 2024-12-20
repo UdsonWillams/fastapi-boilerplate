@@ -6,7 +6,7 @@ from httpx import (
     Response,
 )
 
-from app.exceptions.default_exceptions import (
+from app.default_exceptions.exceptions import (
     ApiInvalidResponseException,
     CurrencyInvalidValuesException,
 )

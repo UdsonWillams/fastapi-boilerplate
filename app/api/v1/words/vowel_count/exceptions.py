@@ -5,7 +5,7 @@ from typing import (
 
 from fastapi import status
 
-from app.exceptions.default_exceptions import DefaultApiException
+from app.default_exceptions.exceptions import DefaultApiException
 
 
 class VowelCountException(DefaultApiException):

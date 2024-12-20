@@ -1,15 +1,11 @@
 import logging
 
 from app.api.v1.currency_converter.exceptions import CurrencyServiceException
-from app.api.v1.currency_converter.models import Currency
-from app.api.v1.currency_converter.utils import (
-    amount_from_api_response,
-    amount_from_bd_response,
-)
-from app.exceptions.default_exceptions import MongoRepositoryTransactionsException
+from app.api.v1.currency_converter.schemas.input import Currency
+from app.default_exceptions.exceptions import MongoRepositoryTransactionsException
 from app.repositories.mongo_repository import MongoRepository
 from app.repositories.redis_repository import RedisRepository
-from app.services.awesomeapi import AwesomeApiService
+from app.services.http_connection.awesomeapi import AwesomeApiService
 
 logger = logging.getLogger(__name__)
 CURRENCY_DATABASE = "currency_db"
@@ -31,7 +27,9 @@ class CurrencyConverterService:
         except MongoRepositoryTransactionsException:
             logger.info("Error in database, trying to get values in the api")
         awesome_response = self.awesome_service.get_currency_values(from_, to)
-        actual_value = amount_from_api_response(from_, to, amount, awesome_response)
+        actual_value = self._amount_from_api_response(
+            from_, to, amount, awesome_response
+        )
         return actual_value
 
     def get_currency(self, acronym: str) -> dict | None:
@@ -106,9 +104,27 @@ class CurrencyConverterService:
             ).model_dump()
             self.redis.create(to, currency_to_exchange)
 
-        amount = amount_from_bd_response(
+        amount = self._amount_from_bd_response(
             current_currency.get("dolar_price_reference"),
             currency_to_exchange.get("dolar_price_reference"),
             amount=amount,
         )
         return amount
+
+    def _amount_from_api_response(
+        self, from_: str, to: str, amount: float, actual_values: dict
+    ) -> str:
+        """ """
+        currencys_used = f"{from_}{to}"
+        quotation = float(actual_values.get(currencys_used, {}).get("bid"))
+        value = quotation * amount
+        return f"{value:.2f}"
+
+    def _amount_from_bd_response(
+        self, from_value: str, to_value: str, amount: float
+    ) -> str:
+        """ """
+        from_value, to_value = float(from_value), float(to_value)
+        quotation = from_value / to_value
+        value = quotation * amount
+        return f"{value:.6f}"

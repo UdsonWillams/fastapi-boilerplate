@@ -10,22 +10,20 @@ from httpx import (
     Response,
 )
 
-from app.exceptions.default_exceptions import (
+from app.default_exceptions.exceptions import (
     ApiInvalidResponseException,
     CurrencyInvalidValuesException,
 )
-from app.services.awesomeapi import AwesomeApiService
+from app.services.http_connection.awesomeapi import AwesomeApiService
 from tests.unit import DefaultTestCase
 
 default_date_format = "%d/%m/%Y"
 
 
 class AwesomeApiServiceTestCase(DefaultTestCase):
-
     @patch.object(Client, "build_request")
     @patch.object(Client, "send")
     def test_get_currency_values(self, mock_http_send: Mock, mock_build_request: Mock):
-
         mock_build_request.return_value = Request("GET", "http/test")
         mock_http_send.return_value = Response(
             status_code=status.HTTP_200_OK, content='{"test":"testing"}'
@@ -41,7 +39,6 @@ class AwesomeApiServiceTestCase(DefaultTestCase):
     def test_get_currency_values_raise_exception_when_receive_invalid_values(
         self, mock_http_send: Mock, mock_build_request: Mock
     ):
-
         mock_build_request.return_value = Request("GET", "http/test")
         mock_http_send.return_value = Response(
             status_code=status.HTTP_200_OK, content="{'test':'testing'}"
@@ -58,7 +55,6 @@ class AwesomeApiServiceTestCase(DefaultTestCase):
     @patch.object(Client, "build_request")
     @patch.object(Client, "send")
     def test_get_mapped_currencys(self, mock_http_send: Mock, mock_build_request: Mock):
-
         mock_build_request.return_value = Request("GET", "http/test")
         mock_http_send.return_value = Response(
             status_code=status.HTTP_200_OK, content='{"test":"testing"}'
@@ -74,7 +70,6 @@ class AwesomeApiServiceTestCase(DefaultTestCase):
     def test_get_mapped_currencys_raise_exception_when_receive_invalid_status_code(
         self, mock_http_send: Mock, mock_build_request: Mock
     ):
-
         mock_build_request.return_value = Request("GET", "http/test")
         mock_http_send.return_value = Response(
             status_code=status.HTTP_404_NOT_FOUND, content='{"detail":"Not found"}'

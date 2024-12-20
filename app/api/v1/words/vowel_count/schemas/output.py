@@ -1,8 +1,5 @@
+# Inserir modelos de output, responses.
 from pydantic import BaseModel
-
-
-class VowelCountRequest(BaseModel):
-    words: list[str]
 
 
 class VowelCountResponse(BaseModel):

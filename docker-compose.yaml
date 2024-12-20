@@ -8,6 +8,7 @@ services:
       - .:/app
     container_name: fastapi-boilerplate
     network_mode: "host"
+    env_file: ".env"
     restart: on-failure
     stdin_open: true
     tty: true
@@ -49,11 +50,28 @@ services:
     depends_on:
       - redis
 
+  postgres_db:
+    image: postgres:latest
+    container_name: postgres_database
+    environment:
+      POSTGRES_USER: myadmin
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - postgres_database_network
+
+
 volumes:
   dbdata:
   redis:
   redis-config:
+  postgres_data:
 
 networks:
+  postgres_database_network:
   redis-network:
     driver: bridge

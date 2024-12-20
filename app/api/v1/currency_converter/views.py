@@ -10,15 +10,15 @@ from fastapi import (
 from fastapi.responses import JSONResponse
 
 from app.api.v1.currency_converter.exceptions import GenericApiException
-from app.api.v1.currency_converter.models import (
+from app.api.v1.currency_converter.schemas.input import (
     Currency,
     UpdateCurrency,
 )
-from app.api.v1.currency_converter.service import CurrencyConverterService
-from app.exceptions.default_exceptions import DefaultApiException
+from app.default_exceptions.exceptions import DefaultApiException
+from app.services.domain.currency_converter_service import CurrencyConverterService
 
 logger = logging.getLogger(__name__)
-router = APIRouter(tags=["Currency"])
+router = APIRouter()
 
 
 @router.get(
@@ -27,7 +27,7 @@ router = APIRouter(tags=["Currency"])
     status_code=status.HTTP_200_OK,
 )
 def get_currency(
-    acronym: Annotated[str, Path(title="Currency Acronym to return")]
+    acronym: Annotated[str, Path(title="Currency Acronym to return")],
 ) -> JSONResponse:
     """
     Returns the currency we created in our database by they name
@@ -75,7 +75,6 @@ def update_currency(
     acronym: Annotated[str, Path(title="Currency Acronym to update")],
     payload: UpdateCurrency,
 ) -> JSONResponse:
-
     service = CurrencyConverterService()
     payload.acronym = acronym
     try:
@@ -98,7 +97,6 @@ def update_currency(
 def delete_currency_by_acronym(
     acronym: Annotated[str, Path(title="Currency Acronym to delete")],
 ) -> JSONResponse:
-
     service = CurrencyConverterService()
     try:
         acronym = service.delete_currency(acronym)

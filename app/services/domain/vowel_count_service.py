@@ -5,7 +5,7 @@ from types import SimpleNamespace
 from unidecode import unidecode
 
 from app.api.v1.words.vowel_count.exceptions import VowelCountException
-from app.api.v1.words.vowel_count.models import VowelCountResponse
+from app.api.v1.words.vowel_count.schemas.output import VowelCountResponse
 
 logger = logging.getLogger(__name__)
 
@@ -14,7 +14,6 @@ VOWELS = SimpleNamespace(A="a", E="e", I="i", O="o", U="u")
 
 
 class VowelCountService:
-
     def return_total_vowels(self, words: list[str]) -> VowelCountResponse:
         """
         verify the total vowels existing in each word passed in the param.

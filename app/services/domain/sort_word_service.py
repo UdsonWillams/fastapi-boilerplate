@@ -1,10 +1,8 @@
 import logging
 
 from app.api.v1.words.sort.exceptions import SortWordsException
-from app.api.v1.words.sort.models import (
-    SortWordsRequest,
-    SortWordsResponse,
-)
+from app.api.v1.words.sort.schemas.input import SortWordsRequest
+from app.api.v1.words.sort.schemas.output import SortWordsResponse
 
 logger = logging.getLogger(__name__)
 

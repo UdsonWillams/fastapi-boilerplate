@@ -7,11 +7,11 @@ from fastapi import (
 from fastapi.responses import JSONResponse
 
 from app.api.v1.words.vowel_count.exceptions import VowelCountException
-from app.api.v1.words.vowel_count.models import VowelCountRequest
-from app.api.v1.words.vowel_count.service import VowelCountService
-from app.exceptions.default_exceptions import InternalServerErrorException
+from app.api.v1.words.vowel_count.schemas.input import VowelCountRequest
+from app.default_exceptions.exceptions import InternalServerErrorException
+from app.services.domain.vowel_count_service import VowelCountService
 
-router = APIRouter(tags=["Words"])
+router = APIRouter()
 logger = logging.getLogger(__name__)
 
 

@@ -1,3 +1,4 @@
+# Inserir modelos de input, requests.
 from datetime import datetime
 from random import randint
 from uuid import uuid4

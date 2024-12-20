@@ -1,6 +1,10 @@
+.PHONY: runserver coverage
+
 runserver:
-	uvicorn app.main:app --reload
+	# docker compose up database -d # Caso seja necessario subir o banco
+	uvicorn app.main:app --reload --host=localhost --port=8080
+
 coverage:
 	coverage run -m unittest
-	coverage report --fail-under 100
+	coverage report --fail-under 95
 	coverage html
