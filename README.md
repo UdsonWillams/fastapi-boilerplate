@@ -1,12 +1,12 @@
 # BoilerPlate de um WebService utilizando FastApi
 
-> projeto de um webservice em FastApi
+> Um webservice em FastApi
 
 [![Python Version][python-image]][python-url]
 [![FastApi][fastapi-image]][fastApi-url]
 ![Coverage][coverage-image]
 
-Criado em Python na versão 3.12 junto ao framework FastApi.
+<p>Criado em Python na versão 3.12 junto ao framework FastApi.</p>
 
 ## Pacotes
 
@@ -83,13 +83,34 @@ Exemplo dos endpoints:
 /api/v1/words/vowel_count :: para contagem das vogais das palavras passadas.
 ```
 
+## Documentação da API
+
+A aplicação possui Swagger para documentação da API. Acesse a documentação em `http://localhost:8000/swagger/`.
+
+## Testes
+
+Para rodar os testes, use o seguinte comando:
+
+```sh
+make coverage
+```
+
+## Ferramentas de Desenvolvimento
+
+Esta aplicação utiliza as seguintes ferramentas de desenvolvimento:
+
+- pre-commit para hooks de commit
+- Ruff para linting e formatação de código
+- ipdb para debugging
+
+
 <!-- Markdown link & img dfn's -->
 
-[python-image]: https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54
+[python-image]: https://img.shields.io/badge/python-3670A0?style=flat-square&logo=python&logoColor=ffdd54
 [python-url]: https://www.python.org/
-[fastApi-image]: https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi
+[fastApi-image]: https://img.shields.io/badge/FastAPI-005571?style=flat-square&logo=fastapi
 [fastApi-url]: https://fastapi.tiangolo.com/
 [uvicorn-url]: https://www.uvicorn.org/
 [pydantic-url]: https://docs.pydantic.dev/latest/
-[fastapi-image]: https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi
+[fastapi-image]: https://img.shields.io/badge/FastAPI-005571?style=flat-square&logo=fastapi
 [coverage-image]: https://coverage-badge.samuelcolvin.workers.dev/tiangolo/fastapi.svg
