@@ -31,5 +31,4 @@ jobs:
       - name: Test with Unittest
         run: |
           pip install coverage
-          coverage run -m unittest
-          coverage report --fail-under 100
+          make coverage
